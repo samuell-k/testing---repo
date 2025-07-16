@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SchoolMessenger - Mobile App Design</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .screens-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            padding: 30px;
+        }
+
+        .screen {
+            background: #f8fafc;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .screen:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .screen-header {
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            color: white;
+            padding: 15px;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .phone-container {
+            background: #000;
+            border-radius: 25px;
+            padding: 8px;
+            margin: 20px;
+            position: relative;
+        }
+
+        .phone-screen {
+            background: white;
+            border-radius: 20px;
+            width: 280px;
+            height: 500px;
+            position: relative;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+
+        .status-bar {
+            background: #000;
+            color: white;
+            padding: 8px 15px;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .screen-content {
+            padding: 20px;
+            height: calc(100% - 32px);
+            overflow-y: auto;
+        }
+
+        /* Splash Screen */
+        .splash {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+
+        .splash .logo {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+
+        .splash h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .splash p {
+            opacity: 0.8;
+            font-size: 1rem;
+        }
+
+        /* Role Selection */
+        .role-selection {
+            text-align: center;
+            padding-top: 50px;
+        }
+
+        .role-selection h2 {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            color: #1f2937;
+        }
+
+        .role-button {
+            width: 100%;
+            padding: 20px;
+            margin-bottom: 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            background: white;
+            color: #374151;
+            font-size: 1.1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .role-button:hover {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        .role-button.selected {
+            border-color: #3b82f6;
+            background: #3b82f6;
+            color: white;
+        }
+
+        /* Auth Screens */
+        .auth-screen h2 {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            color: #1f2937;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #3b82f6;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+        }
+
+        .link {
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            padding: 15px;
+        }
+
+        .dashboard h2 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: #1f2937;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .dashboard-card .icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .dashboard-card h3 {
+            font-size: 1rem;
+            color: #1f2937;
+            margin-bottom: 5px;
+        }
+
+        .dashboard-card p {
+            font-size: 0.8rem;
+            color: #6b7280;
+        }
+
+        /* List Items */
+        .list-item {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .list-item-content h4 {
+            font-size: 1rem;
+            color: #1f2937;
+            margin-bottom: 5px;
+        }
+
+        .list-item-content p {
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .badge.success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .badge.warning {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge.danger {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        /* Navigation */
+        .nav-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            padding: 10px 0;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .nav-item {
+            text-align: center;
+            color: #6b7280;
+            font-size: 0.8rem;
+            padding: 5px;
+        }
+
+        .nav-item.active {
+            color: #3b82f6;
+        }
+
+        .nav-item .icon {
+            font-size: 1.2rem;
+            margin-bottom: 2px;
+        }
+
+        /* Messages */
+        .message {
+            margin-bottom: 15px;
+            max-width: 80%;
+        }
+
+        .message.sent {
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .message.received {
+            margin-right: auto;
+        }
+
+        .message-bubble {
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        .message.sent .message-bubble {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .message.received .message-bubble {
+            background: #f3f4f6;
+            color: #1f2937;
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            color: #6b7280;
+            margin-top: 5px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .screens-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .phone-container {
+                margin: 10px;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .screen {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        /* Additional Styles */
+        .text-center { text-align: center; }
+        .text-sm { font-size: 0.9rem; }
+        .text-xs { font-size: 0.8rem; }
+        .mt-20 { margin-top: 20px; }
+        .mb-10 { margin-bottom: 10px; }
+        .mb-20 { margin-bottom: 20px; }
+        .p-10 { padding: 10px; }
+        .p-15 { padding: 15px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📱 SchoolMessenger</h1>
+            <p>Complete Mobile App Design System</p>
+        </div>
+
+        <div class="screens-grid">
+            <!-- 1. Splash Screen -->
+            <div class="screen">
+                <div class="screen-header">1. Splash Screen</div>
+                <div class="phone-container">
+                    <div class="phone-screen">
+                        <div class="status-bar">
+                            <span>9:41</span>
+                            <span>100%</span>
+                        </div>
+                        <div class="screen-content splash">
+                            <div class="logo">📚</div>
+                            <h1>SchoolMessenger</h1>
+                            <p>Connecting Schools & Families</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 2. Role Selection Screen -->
+            <div class="screen">
+                <div class="screen-header">2. Role Selection</div>
+                <div class="phone-container">
+                    <div class="phone-screen">
+                        <div class="status-bar">
+                            <span>9:41</span>
+                            <span>100%</span>
+                        </div>
+                        <div class="screen-content role-selection">
+                            <h2>Choose Your Role</h2>
+                            <div class="role-button selected">
+                                👨‍🏫 Teacher
+                            </div>
+                            <div class="role-button">
+                                👨‍👩‍👧‍👦 Parent
+                            </div>
+                            <div class="mt-20">
+                                <button class="btn-primary">Continue</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Login Screen -->
+            <div class="screen">
+                <div class="screen-header">3. Login Screen</div>
+                <div class="phone-container">
+                    <div class="phone-screen">
+                        <div class="status-bar">
+                            <span>9:41</span>
+                            <span>100%</span>
+                        </div>
+                        <div class="screen-content auth-screen">
+                            <h2>Welcome Back</h2>
+                            <div class="form-group">
+                                <label>Email or Phone</label>
+                                <input type="text" placeholder="Enter your email or phone">
+                            </div>
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input type="password" placeholder="Enter your password">
+                            </div>
+                            <button class="btn-primary">Sign In</button>
+                            <div class="text-center mt-20">
+                                <a href="#" class="link">Forgot Password?</a>
+                            </div>
+                            <div class="text-center mt-20">
+                                <span>Don't have an account? </span>
+                                <a href="#" class="link">Sign Up</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4. Signup Screen -->
+            <div class="screen">
+                <div class="screen-header">4. Signup Screen</div>
+                <div class="phone-container">
+                    <div class="phone-screen">
+                        <div class="status-bar">
+                            <span>9:41</span>
+                            <span>100%</span>
+                        </div>
+                        <div class="screen-content auth-screen">
+                            <h2>Create Account</h2>
+                            <div class="form-group">
+                                <label>Full Name</label>
+                                <input type="text" placeholder="Enter your full name">
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" placeholder="Enter your email">
+                            </div>
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input type="password" placeholder="Create a password">
+                            </div>
+                            <div class="form-group">
+                                <label>Role</label>
+                                <select style="width: 100%; padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px;">
+                                    <option>Teacher</option>
+                                    <option>Parent</option>
+                                </select>
+                            </div>
+                            <button class="btn-primary">Sign Up</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 5. Teacher Dashboard -->
+            <div class="screen">
+                <div class="screen-header">5. Teacher Dashboard</div>
+                <div class="phone-container">
+                    <div class="phone-screen">
+                        <div class="status-bar">
+                            <span>9:41</span>
+                            <span>100%</span>
+                        </div>
+                        <div class="screen-content dashboard">
+                            <h2>Welcome, Ms. Johnson</h2>
+                            <div class="dashboard-grid">
+                                <div class="dashboard-card">
+                                    <div class="icon">📝</div>
+                                    <h3>Homework</h3>
+                                    <p>Manage assignments</p>
+                                </div>
+                                <div class="dashboard-card">
+                                    <div class="icon">✅</div>
+                                    <h3>Attendance</h3>
+                                    <p>Mark daily attendance</p>
+                                </div>
+                                <div class="dashboard-card">
+                                    <div class="icon">📢</div>
+                                    <h3>Announcements</h3>
+                                    <p>Post class updates</p>
+                                </div>
+                                <div class="dashboard-card">
+                                    <div class="icon">💬</div>
+                                    <h3>Messages</h3>
+                                    <p>Chat with parents</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="nav-bar">
+                            <div class="nav-item active">
+                                <div class="icon">🏠</div>
+                                <div>Home</div>
+                            </div>
+                            <div class="nav-item">
+                                <div class="icon">📝</div>
+                                <div>Homework</div>
+                            </div>
+                            <div class="nav-item">
+                                <div class="icon">💬</div>
+                                <div>Messages</div>
+                            </div>
+                            <div class="nav-item">
+                                <div class="icon">👤</div>
+                                <div>Profile</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 6. Parent Dashboard -->
+            <div class="screen">
+                <div class="screen-header">6. Parent Dashboard</div>
+                <div class="phone-container">
+                    <div class="phone-screen">
+                        <div class="status-bar">
+                            <span>9:41</span>
+                            <span>100%</span>
+                        </div>
+                        <div class="screen-content dashboard">
+                            <h2>Hi, Mr. Smith</h2>
+                            <div class="text-sm mb-20">Emma's Progress</div>
+                            <div class="dashboard-grid">
+                                <div class="dashboard-card">
+                                    <div class="icon">📚</div>
+                                    <h3>Homework</h3>
+                                    <p>View assignments</p>
+                                </div>
+                                <div class="dashboard-card">
+                                    <div class="icon">📊</div>
+                                    <h3>Attendance</h3>
+                                    <p>Check attendance</p>
+                                </div>
+                                <div class="dashboard-card">
+                                    <div class="icon">📣</div>
+                                    <h3>Announcements</h3>
+                                    <p>Class updates</p>
+                                </div>
+                                <div class="dashboard-card">
+                                    <div class="icon">💬</div>
+                                    <h3>Messages</h3>
+                                    <p>Chat with teacher</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="nav-bar">
+                            <div class="nav-item active">
+                                <div class="icon">🏠</div>
+                                <div>Home</div>
+                            </div>
+                            <div class="nav-item">
+                                <div class="icon">📚</div>
+                                <div>Homework</div>
+                            </div>
+                            <div class="nav-item">
+                                <div class="icon">💬</div>
+                                <div>Messages</div>
+                            </div>
+                            <div class="nav-item">
+                                <div class="icon">👤</div>
+                                <div>Profile</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 7. Homework Management (Teacher) -->
+            <div class="screen">
+                <div class="screen-header">7. Homework Management</div>
+                <div class="phone-container">
+                    <div class="phone-screen">
+                        <div class="status-bar">
+                            <span>9:41</span>
+                            <span>100%</span>
+                        </div>
+                        <div class="screen-content p-15">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                                <h2>Homework</h2>
+                                <button style="background: #3b82f6; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 0.9rem;">+ Add</button>
+                            </div>
+                            <div class="list-item">
+                                <div class="list-item-content">
+                                    <h4>Math Chapter 5</h4>
+                                    <p>Due: Tomorrow</p>
+                                </div>
+                                <div class="badge warning">Pending</div>
+                            </div>
+                            <div class="list-item">
+                                <div class="list-item-content">
+                                    <h4>Science Project</h4>
+                                    <p>Due: Friday</p>
+                                </div>
+                                <div class="badge success">Assigned</div>
+                            </div>
+                            <div class="list-item">
+                                <div class="list-item-content">
+                                    <h4>English Essay</h4>
+                                    <p>Due: Next Week</p>
+                                </div>
+                                <div class="badge danger">Overdue</div>
+                            </div>
+                        </div>
+                        <div class="nav-bar">
+                            <div class="nav-item">
+                                <div class="icon">🏠</div>
+                                <div>Home</div>
+                            </div>
+                            <div class="nav-item active">
+                                <div class="icon">📝</div>
+                                <div>Homework</div>
+                            </div>
+                            <div class="nav-item">
+                                <div class="icon">💬</div>
+                                <div>Messages</div>
+                            </div>
+                            <div class="nav-item">
+                                <div class="icon">👤</div>
+                                <div>Profile</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 8. Attendance Marking -->
+            <div class="screen">
+                <div class="screen-header">8. Attendance Marking</div>
+                <div class="phone-container">
+                    <div class="phone-screen">
+                        <div class="status-bar">
+                            <span>9:41</span>
+                            <span>100%</span>
+                        </div>
+                        <div class="screen-content p-15">
+                            <h2>Attendance</h2>
+                            <div class="text-sm mb-20">Today, March 15, 2024</div>
+                            <div class="list-item">
+                                <div class="list-item-content">
+                                    <h4>Emma Smith</h4>
+                                    <p>Roll No: 001</p>
+                                </div>
+                                <div class="badge success">Present</div>
+                            </div>
+                            <div class="list-item">
+                                <div class="list-item-content">
+                                    <h4>John Doe</h4>
+                                    <p>Roll No: 002</p>
+                                </div>
+                                <div class="badge danger">Absent</div>
+                            </div>
+                            <div class="list-item">
+                                <div class="list-item-content">
+                                    <h4>Sarah Johnson</h4>
+                                    <p>Roll No: 003</p>
+                                </div>
+                                <div class="badge success">Present</div>
+                            </div>
+                            <div class="mt-20">
+                                <button class="btn-primary">Save Attendance</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 9. Messages/Chat Screen -->
+            <div class="screen">
+                <div class="screen-header">9. Messages/Chat Screen</div>
+                <div class="phone-container">
+                    <div class="phone-screen">
+                        <div class="status-bar">
+                            <span>9:41</span>
+                            <span>100%</span>
+                        </div>
+                        <div class="screen-content p-15">
+                            <div style="background: #f8fafc; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
+                                <h3>Ms. Johnson</h3>
+                                <p class="text-sm">Grade 5 Teacher</p>
+                            </div>
+                            <div class="message received">
+                                <div class="message-bubble">
+                                    Hello Mr. Smith! Emma did great on her math test today.
+                                </div>
+                                <div class="message-time">10:30 AM</div>
+                            </div>
+                            <div class="message sent">
+                                <div class="message-bubble">
+                                    Thank you for letting me know! She's been studying hard.
+                                </div>
+                                <div class="message-time">10:32 AM</div>
+                            </div>
+                            <div class="message received">
+                                <div class="message-bubble">
+                                    Please remind her about the science project due Friday.
+                                </div>
+                                <div class="message-time">10:35 AM</div>
+                            </div>
+                            <div style="position: absolute; bottom: 60px; left: 15px; right: 15px; background: white; padding: 10px; border-top: 1px solid #e5e7eb;">
+                                <div style="display: flex; gap: 10px;">
+                                    <input type="text" placeholder="Type a message..." style="flex: 1; padding: 10px; border: 1px solid #e5e7eb; border-radius: 20px;">
+                                    <button style="background: #3b82f6; color: white; border: none; padding: 10px 15px; border-radius: 50%;">📤</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="nav-bar">
+                            <div class="nav-item">
+                                <div class="icon">🏠</div>
+                                <div>Home</div>
+                            </div>
+                            <div class="nav-item">
+                                <div class="icon">📚</div>
+                                <div>Homework</div>
+                            </div>
+                            <div class="nav-item active">
+                                <div class="icon">💬</div>
+                                <div>Messages</div>
+                            </div>
+                            <div class="nav-item">
+                                <div class="icon">👤</div>
+                                <div>Profile</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 10. Homework Detail Screen -->
+            <div class="screen">
+                <div class="screen-header">10. Homework Detail</div>
+                <div class="phone-container">
+                    <div class="phone-screen">
+                        <div class="status-bar">
+                            <span>9:41</span>
+                            <span>100%</span>
+                        </div>
+                        <div class="screen-content p-15">
+                            <div style="display: flex; align-items: center; margin-bottom: 20px;">
+                                <button style="background: none; border: none; font-size: 1.2rem; margin-right: 10px;">←</button>
+                                <h2>Math Chapter 5</h2>
+                            </div>
+                            <div style="background: #f8fafc; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+                                <h3>Assignment Details</h3>
+                                <p class="text-sm" style="margin-top: 10px;">Complete exercises 1-20 on page 85. Show all working for word problems.</p>
+                            </div>
+                            <div class="list-item">
+                                <div class="list-item-content">
+                                    <h4>Due Date</h4>
+                                    <p>Tomorrow, 9:00 AM</p>
+                                </div>
+                            </div>
+                            <div class="list-item">
+                                <div class="list-item-content">
+                                    <h4>Subject</h4>
+                                    <p>Mathematics</p>
+                                </div>
+                            </div>
+                            <div class="list-item">
+                                <div class="list-item-content">
+                                    <h4>Attachment</h4>
+                                    <p>worksheet.pdf</p>
+                                </div>
+                            </div>
+                            <div class="mt-20">
+                                <button class="btn-primary">Mark as Complete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 11
